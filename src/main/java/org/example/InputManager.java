@@ -1,9 +1,10 @@
 package org.example;
 
-public interface ManagerIO {
+public interface InputManager {
         float readCell(int indexCol, int indexRow);
-        void writeCell(String cell, String value);
         int getCountOfRowsWithData(int indexCol);
         int getNumOfFirstRowWithData(int indexCol);
         String readTariffName(int indexCol);
+        String readTitle();
+        String readPlace();
 }

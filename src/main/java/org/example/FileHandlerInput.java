@@ -7,16 +7,15 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Objects;
 
-public class FileHandler implements ManagerIO {
-
-    private File file;
+public class FileHandlerInput implements InputManager {
 
     private Sheet sheet;
 
-    public FileHandler(String path) {
+    public FileHandlerInput(String path) {
         try {
-            this.file = new File(path);
+            File file = new File(path);
             this.sheet = SpreadSheet.createFromFile(file).getSheet(0);
         } catch (IOException exception) {
             System.out.println("Zła ścieżka do pliku");
@@ -35,9 +34,15 @@ public class FileHandler implements ManagerIO {
         Cell<?> cell = sheet.getImmutableCellAt(indexCol, 2);
         return cell.getValue().toString();
     }
-    public void writeCell(String cell, String value) {
-        sheet.getCellAt(cell).setValue(value);
+    public String readTitle(){
+        Cell<?> cell = sheet.getImmutableCellAt(0, 0);
+        return cell.getValue().toString();
     }
+    public String readPlace(){
+        Cell<?> cell = sheet.getImmutableCellAt(1, 1);
+        return cell.getValue().toString();
+    }
+
 
     public int getCountOfRowsWithData(int indexCol) {
         int rowCount = 0;
@@ -45,7 +50,7 @@ public class FileHandler implements ManagerIO {
         for (int indexRow = 0; indexRow < 4096; indexRow++) {
             Cell<?> cell = sheet.getImmutableCellAt(indexCol, indexRow);
             if(!cell.isEmpty()){
-                if(cell.getValueType().toString()=="FLOAT"){
+                if(Objects.equals(cell.getValueType().toString(), "FLOAT")){
                     rowCount++;
                 }
 
@@ -60,7 +65,7 @@ public class FileHandler implements ManagerIO {
         for (int indexRow = 0; indexRow < 4096; indexRow++) {
             Cell<?> cell = sheet.getImmutableCellAt(indexCol, indexRow);
             if(!cell.isEmpty()){
-                if(cell.getValueType().toString()=="FLOAT"){
+                if(Objects.equals(cell.getValueType().toString(), "FLOAT")){
                    return indexRow+1;
                 }
             }
